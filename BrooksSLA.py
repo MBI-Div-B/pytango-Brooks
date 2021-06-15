@@ -1,14 +1,8 @@
 #!/usr/bin/python3 -u
 # -*- coding: utf-8 -*-
-#
-# This file is part of the BronkhorstPressureCtrl project
-#
-#
-#
-# Distributed under the terms of the GPL license.
-# See LICENSE.txt for more info.
 
-""" BronkhorstPressureCtrl PyTango Class (Serial connection)
+
+""" BrooksSLA PyTango Class (Serial connection)
 
 Class for controlling Bronkhorst Pressure/Flow controller via serial connection
 """
