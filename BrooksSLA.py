@@ -47,7 +47,6 @@ class BrooksSLA(Device):
         dtype='DevDouble',
         access=AttrWriteType.READ,
         unit="mbar",
-        memorized=True,
     )
 
     # ---------------
