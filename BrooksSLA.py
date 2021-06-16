@@ -5,6 +5,8 @@
 """ BrooksSLA PyTango Class (Serial connection)
 
 Class for controlling Bronkhorst Pressure/Flow controller via serial connection
+
+Author = Martin Hennecke
 """
 
 # PyTango imports
@@ -48,6 +50,11 @@ class BrooksSLA(Device):
         access=AttrWriteType.READ,
         unit="mbar",
     )
+    PID_enable = attribute(
+        dtype='DevBoolean',
+        access=AttrWriteType.READ_WRITE,
+        memorized=True,
+    )
 
     # ---------------
     # General methods
@@ -65,9 +72,14 @@ class BrooksSLA(Device):
         # connect to device
         self.sla = b.Brooks(self.ID, self.Port)
         
-        attr = Database().get_device_attribute_property(self.get_name(), ["Setpoint"])
-        self.__setpoint = float(attr["Setpoint"]["__value"][0])
-
+        #attr = Database().get_device_attribute_property(self.get_name(), ["Setpoint"])
+        self.__setpoint = float(Database().get_device_attribute_property(self.get_name(), ["Setpoint"])["Setpoint"]["__value"][0])
+        
+        if Database().get_device_attribute_property(self.get_name(), ["PID_enable"])["PID_enable"]["__value"][0] == "true":
+            self.__pid_enable = True
+        else:
+            self.__pid_enable = False
+        
         self.set_status("The device is in ON state")
         self.set_state(DevState.ON)
 
@@ -87,14 +99,21 @@ class BrooksSLA(Device):
     def read_Readback(self):
         return self.sla.read_flow()
 
-
     def read_Setpoint(self):
         return self.__setpoint     
     
     def write_Setpoint(self, value):
-        self.sla.set_flow(value)
+        self.sla.set_flow(value*self.__pid_enable)
         self.__setpoint=value
-        pass   
+        pass
+        
+    def read_PID_enable(self):
+        return self.__pid_enable     
+    
+    def write_PID_enable(self, value):
+        self.__pid_enable=value
+        self.write_Setpoint(self.__setpoint)
+        pass  
 
     # --------
     # Commands

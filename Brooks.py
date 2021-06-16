@@ -124,7 +124,7 @@ class Brooks(object):
         ieee = struct.pack('>f', flowrate)
         ieee_flowrate = ''
         for i in range(0, 4):
-            ieee_flowrate += hex(ord(ieee[i]))[2:].zfill(2)
+            ieee_flowrate += hex(ieee[i])[2:].zfill(2)
         #39 = unit code for percent
         #FA = unit code for 'same unit as flowrate measurement'
         response = self.comm('82' + self.long_address +
