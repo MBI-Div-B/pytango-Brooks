@@ -44,6 +44,7 @@ class BrooksSLA(Device):
         access=AttrWriteType.READ_WRITE,
         unit="mbar",
         memorized=True,
+        hw_memorized=True,
     )
     Readback = attribute(
         dtype='DevDouble',
@@ -51,9 +52,9 @@ class BrooksSLA(Device):
         unit="mbar",
     )
     PID_enable = attribute(
+        label='PID enable',
         dtype='DevBoolean',
         access=AttrWriteType.READ_WRITE,
-        memorized=True,
     )
 
     # ---------------
@@ -66,19 +67,21 @@ class BrooksSLA(Device):
         Device.init_device(self)
         self.set_state(DevState.INIT)
               
-        self.info_stream("port: {:s}".format(self.Port))
-        self.info_stream("ID: {:s}".format(self.ID))
+        try:
+            self.info_stream("Connecting on port: {:s}".format(self.Port))
+            # connect to device
+            self.sla = b.Brooks(self.ID, self.Port)
+            self.info_stream("Connected to device ID: {:s}".format(self.ID))
+        except:
+            self.error_stream("Could not connect to device ID {:s} on port {:s}!".format(self.ID, self.Port))
+            self.set_status("The device is in OFF state")
+            self.set_state(DevState.OFF)
         
-        # connect to device
-        self.sla = b.Brooks(self.ID, self.Port)
         
         #attr = Database().get_device_attribute_property(self.get_name(), ["Setpoint"])
-        self.__setpoint = float(Database().get_device_attribute_property(self.get_name(), ["Setpoint"])["Setpoint"]["__value"][0])
+        #self.__setpoint = float(Database().get_device_attribute_property(self.get_name(), ["Setpoint"])["Setpoint"]["__value"][0])
         
-        if Database().get_device_attribute_property(self.get_name(), ["PID_enable"])["PID_enable"]["__value"][0] == "true":
-            self.__pid_enable = True
-        else:
-            self.__pid_enable = False
+        self.__pid_enable = False
         
         self.set_status("The device is in ON state")
         self.set_state(DevState.ON)
@@ -105,7 +108,6 @@ class BrooksSLA(Device):
     def write_Setpoint(self, value):
         self.sla.set_flow(value*self.__pid_enable)
         self.__setpoint=value
-        pass
         
     def read_PID_enable(self):
         return self.__pid_enable     
@@ -113,7 +115,6 @@ class BrooksSLA(Device):
     def write_PID_enable(self, value):
         self.__pid_enable=value
         self.write_Setpoint(self.__setpoint)
-        pass  
 
     # --------
     # Commands
