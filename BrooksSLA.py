@@ -77,10 +77,6 @@ class BrooksSLA(Device):
             self.set_status("The device is in OFF state")
             self.set_state(DevState.OFF)
         
-        
-        #attr = Database().get_device_attribute_property(self.get_name(), ["Setpoint"])
-        #self.__setpoint = float(Database().get_device_attribute_property(self.get_name(), ["Setpoint"])["Setpoint"]["__value"][0])
-        
         self.__pid_enable = False
         
         self.set_status("The device is in ON state")
