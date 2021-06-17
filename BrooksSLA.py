@@ -10,7 +10,7 @@ Author = Martin Hennecke
 """
 
 # PyTango imports
-from tango import Database, DevState, AttrWriteType
+from tango import DevState, AttrWriteType
 from tango.server import run, Device, attribute, device_property
 # Additional import
 import Brooks as b
