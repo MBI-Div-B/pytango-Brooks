@@ -13,7 +13,7 @@ Author = Martin Hennecke
 from tango import DevState, AttrWriteType, DeviceProxy
 from tango.server import run, Device, attribute, command, device_property
 # Additional import
-import Brooks_TS as b
+import Brooks as b
 from enum import IntEnum
 
 class ValveState(IntEnum):
