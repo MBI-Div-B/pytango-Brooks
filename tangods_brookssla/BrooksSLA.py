@@ -13,7 +13,7 @@ Author = Martin Hennecke
 from tango import DevState, AttrWriteType, DeviceProxy
 from tango.server import run, Device, attribute, command, device_property
 # Additional import
-from .Brooks import Brooks as b
+from .Brooks import Brooks
 from enum import IntEnum
 
 class ValveState(IntEnum):
@@ -89,7 +89,7 @@ class BrooksSLA(Device):
         try:
             self.info_stream("Connecting on port: {:s}".format(self.Port))
             # connect to device
-            self.sla = b.Brooks(self.ID, self.Port)
+            self.sla = Brooks(self.ID, self.Port)
             self.info_stream("Connected to device ID: {:s}".format(self.ID))
         except:
             self.error_stream("Could not connect to device ID {:s} on port {:s}!".format(self.ID, self.Port))
