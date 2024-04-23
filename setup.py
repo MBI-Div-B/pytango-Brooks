@@ -12,6 +12,7 @@ setup(
     packages=["tangods_brookssla"],
     install_requires=[
         "pytango",
+        "six",
     ],
     url="https://github.com/MBI-Div-b/pytango-BrooksSLA",
     keywords=[
