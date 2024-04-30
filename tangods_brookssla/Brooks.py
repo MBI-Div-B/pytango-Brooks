@@ -87,7 +87,7 @@ class Brooks(object):
         error = 1
         while (error > 0) and (error < 10):
             self.ser.write(bytes_for_serial)
-            time.sleep(0.3)
+            time.sleep(0.05)
             s = self.ser.read(self.ser.inWaiting())
             # print(s)
             st = ''
